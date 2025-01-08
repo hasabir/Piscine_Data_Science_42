@@ -10,3 +10,23 @@ CREATE TABLE public.test
 
 ALTER TABLE IF EXISTS public.test
     OWNER to hasabir;
+
+/******************************************************************************/
+CREATE TABLE public.test
+(
+    product_id bigint,
+    category_id bigint,
+    category_code character varying,
+    brand character varying
+);
+
+ALTER TABLE IF EXISTS public.test
+    OWNER TO hasabir;
+
+
+COPY public.test FROM '/tmp/data/item/item.csv' DELIMITER ',' CSV HEADER;
+
+
+
+
+SELECT * FROM test;
