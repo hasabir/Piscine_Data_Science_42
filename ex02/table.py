@@ -11,19 +11,21 @@ connection = psycopg2.connect(
 cursor = connection.cursor()
 
 sql = """
-CREATE TABLE public.test (
+CREATE TABLE public.data_2022_oct (
+    event_time TIMESTAMP WITH TIME ZONE,
+    event_type character varying,
     product_id bigint,
-    category_id bigint,
-    category_code character varying,
-    brand character varying
+    price numeric,
+    user_id bigint,
+    user_session uuid
 );
 
-ALTER TABLE IF EXISTS public.test OWNER TO hasabir;
+ALTER TABLE IF EXISTS public.data_2022_oct OWNER TO hasabir;
 
-COPY public.test FROM '/tmp/data/item/item.csv' DELIMITER ',' CSV HEADER;
+COPY public.data_2022_oct FROM '/tmp/data/customer/data_2022_oct.csv' DELIMITER ',' CSV HEADER;
 
-SELECT * FROM test;
 """
+# SELECT * FROM data_2022_oct;
 
 cursor.execute(sql)
 connection.commit()
