@@ -1,9 +1,8 @@
-# version: '3.8'
 
 services:
   db:
     image: postgres:latest
-    container_name: postgres_container
+    container_name: postgres
     environment:
       POSTGRES_USER: hasabir
       POSTGRES_PASSWORD: mysecretpassword
@@ -13,12 +12,9 @@ services:
     volumes:
       - ./subject:/tmp/data
 
-
-
-
   pgAdmin:
     image: dpage/pgadmin4
-    container_name: pgAdmin_container
+    container_name: pgAdmin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: root
@@ -26,7 +22,3 @@ services:
       - db
     ports:
       - "5050:80"
-
-
-volumes:
-  postgres_data:

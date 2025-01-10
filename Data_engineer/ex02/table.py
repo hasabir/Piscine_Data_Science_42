@@ -25,7 +25,7 @@ ALTER TABLE IF EXISTS public.data_2022_oct OWNER TO hasabir;
 COPY public.data_2022_oct FROM '/tmp/data/customer/data_2022_oct.csv' DELIMITER ',' CSV HEADER;
 
 """
-# SELECT * FROM data_2022_oct;
+
 
 cursor.execute(sql)
 connection.commit()
