@@ -14,10 +14,8 @@ def main():
         current_dir = root.split('/')[-1]
         if current_dir == 'customer':
             for file in files:
-                file_path = f"{root}/{file}"
-                print(file_path)
-                customers  = pd.read_csv(file_path)
-                # for chunk in pd.read_csv(file_path, chunksize=10000):
+                print(file)
+                customers  = pd.read_csv(f"{root}/{file}")
                 customers.to_sql('customers', engine, if_exists='append', index=False)
     
     engine.close()
