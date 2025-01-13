@@ -39,38 +39,38 @@ COPY public.{table_name} FROM '{file_path}' DELIMITER ',' CSV HEADER;
 
 
 def main():
+    try:
+        connection = psycopg2.connect(
+            host='localhost',
+            port='5432',
+            database="piscineds",
+            user='hasabir',
+            password='mysecretpassword'
+        )
 
-    connection = psycopg2.connect(
-        host='localhost',
-        port='5432',
-        database="piscineds",
-        user='hasabir',
-        password='mysecretpassword'
+        cursor = connection.cursor()
 
-    )
+        directory_path = "../subject"
 
+        for root, _ , files in os.walk(directory_path):
+            current_dir = root.split('/')[-1:][0]
+            
+            
+            for file in files:
+                if current_dir == 'customer':
+                    sql = create_customer_table(file[:-4], f"/tmp/data/{current_dir}/{file}")
+                else:
+                    sql = create_item_table(file[:-4], f"/tmp/data/{current_dir}/{file}")
+                cursor.execute(sql)
+                connection.commit()
+    except Exception as err:
+        print(f"error :{err}")
+    finally:
+        if connection:
+            connection.close()
+        if cursor:
+            cursor.close()
 
-    cursor = connection.cursor()
-
-    directory_path = "../subject"
-
-    for root, _ , files in os.walk(directory_path):
-        current_dir = root.split('/')[-1:][0]
-        
-        
-        for file in files:
-            if current_dir == 'customer':
-                sql = create_customer_table(file[:-4], f"/tmp/data/{current_dir}/{file}")
-            else:
-                sql = create_item_table(file[:-4], f"/tmp/data/{current_dir}/{file}")
-            cursor.execute(sql)
-            connection.commit()
-
-
-
-
-    cursor.close()
-    connection.close()
 
 if __name__ == "__main__":
     main()

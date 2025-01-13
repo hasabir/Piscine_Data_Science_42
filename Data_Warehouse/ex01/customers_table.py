@@ -13,19 +13,22 @@ type_dict = {
 }
 
 def main():
-    db = sql.create_engine("postgresql://hasabir:mysecretpassword@localhost:5432/piscineds")
-    engine = db.connect()
-    
-    directory_path = "../subject"
-    for root, _, files in os.walk(directory_path):
-        current_dir = root.split('/')[-1]
-        if current_dir == 'customer':
-            for file in files:
-                print(file)
-                customers  = pd.read_csv(f"{root}/{file}")
-                customers.to_sql('customers', engine, if_exists='append', index=False, dtype=type_dict)
-    
-    engine.close()
+    try:
+        db = sql.create_engine("postgresql://hasabir:mysecretpassword@localhost:5432/piscineds")
+        engine = db.connect()
+        
+        directory_path = "../subject"
+        for root, _, files in os.walk(directory_path):
+            current_dir = root.split('/')[-1]
+            if current_dir == 'customer':
+                for file in files:
+                    print(file)
+                    customers  = pd.read_csv(f"{root}/{file}")
+                    customers.to_sql('customers', engine, if_exists='append', index=False, dtype=type_dict)
+    except Exception as err:
+        print(f"error : {err}")
+    finally:
+        engine.close()
 
 if __name__ == "__main__":
     main()

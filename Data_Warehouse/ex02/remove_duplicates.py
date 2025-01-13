@@ -8,25 +8,6 @@ WHERE product_id = 5809103
   AND event_time = '2022-10-01 00:00:30+00'::timestamp with time zone;
 """
 
-with open('remove_duplicates.sql', 'r') as file:
-    delet_request = file.read()
-
-# delete_request = """
-# DELETE FROM customers
-# USING (
-#     SELECT ctid, product_id, user_id, event_type, user_session
-#     FROM (
-#         SELECT ctid, product_id, user_id, event_type, user_session,
-#                ROW_NUMBER() OVER (
-#                    PARTITION BY product_id, user_id, event_type, user_session
-#                    ORDER BY product_id ASC
-#                ) AS row_num
-#         FROM customers
-#     ) AS subquery
-#     WHERE row_num > 1
-# ) AS duplicates
-# WHERE customers.ctid = duplicates.ctid;
-# """
 
 def print_rows(query, cursor):
     """Execute a query and print the resulting rows."""
@@ -45,6 +26,9 @@ def main():
             user='hasabir',
             password='mysecretpassword'
         )
+
+        with open('remove_duplicates.sql', 'r') as file:
+            delete_request = file.read()
         cursor = connection.cursor()
 
         print("Before Deletion:")
