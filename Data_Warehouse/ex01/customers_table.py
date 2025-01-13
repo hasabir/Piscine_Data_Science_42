@@ -1,4 +1,3 @@
-import psycopg2
 import os
 import pandas as pd
 import sqlalchemy as sql
@@ -7,7 +6,7 @@ import sqlalchemy as sql
 type_dict = {
     'event_time': sql.types.TIMESTAMP(timezone=True),
     'event_type': sql.types.TEXT,
-    'product_id': sql.types.BIGINT,
+    'product_id': sql.types.INTEGER,
     'price': sql.types.NUMERIC,
     'user_id': sql.types.BIGINT,
     'user_session': sql.types.UUID

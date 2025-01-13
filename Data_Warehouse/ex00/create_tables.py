@@ -6,7 +6,7 @@ def create_customer_table(table_name, file_path):
 CREATE TABLE IF NOT EXISTS public.{table_name} (
     event_time TIMESTAMP WITH TIME ZONE,
     event_type character varying,
-    product_id bigint,
+    product_id integer,
     price money,
     user_id bigint,
     user_session uuid
