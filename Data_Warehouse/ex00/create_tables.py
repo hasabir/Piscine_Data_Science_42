@@ -50,10 +50,10 @@ def main():
 
         cursor = connection.cursor()
 
-        directory_path = "../subject"
+        directory_path = "../data"
 
         for root, _ , files in os.walk(directory_path):
-            current_dir = root.split('/')[-1:][0]
+            current_dir = root.split('/')[-1]
             
             
             for file in files:

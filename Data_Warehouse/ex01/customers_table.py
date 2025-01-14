@@ -17,7 +17,7 @@ def main():
         db = sql.create_engine("postgresql://hasabir:mysecretpassword@localhost:5432/piscineds")
         engine = db.connect()
         
-        directory_path = "../subject"
+        directory_path = "../data"
         for root, _, files in os.walk(directory_path):
             current_dir = root.split('/')[-1]
             if current_dir == 'customer':
