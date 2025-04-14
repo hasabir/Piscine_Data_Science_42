@@ -10,8 +10,7 @@ def main():
   
         cursor.execute("SELECT event_type FROM customers")
         rows = cursor.fetchall()
-        connection.commit()
-        
+
         
         
         rows = np.array([row[0] for row in rows])

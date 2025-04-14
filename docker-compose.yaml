@@ -11,12 +11,12 @@ services:
       - "5432:5432"
     volumes:
       - ./data:/tmp/data
-      # - /home/hasabir/data:/var/lib/postgresql/data
+      - /home/hasabir/psql:/var/lib/postgresql/data
 
 
   pgAdmin:
     image: dpage/pgadmin4
-    container_name: pgAdmin
+    container_name: pgAdmin_container
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: root
@@ -24,5 +24,11 @@ services:
       - db
     ports:
       - "5050:80"
-    # volumes:
-      # - /home/hasabir/data:/var/lib/pgadmin
+    volumes:
+      - /home/hasabir/pgAdmin:/var/lib/pgadmin
+
+
+
+
+# sudo chown -R 5050:0 /home/hasabir/pgAdmin
+# sudo chmod -R 775 /home/hasabir/pgAdmin
