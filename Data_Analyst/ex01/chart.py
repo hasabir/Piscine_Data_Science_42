@@ -3,9 +3,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from collections import Counter
 import matplotlib.dates as mdates
+import matplotlib.ticker as ticker
+import pandas as pd
 
 def line_chart(event_time):
-
+ 
     dates = np.array([date.date() for date in event_time])
     unique_dates, counts = np.unique(dates, return_counts=True)
     
@@ -22,7 +24,6 @@ def line_chart(event_time):
 
  
     ax.grid(color='white')
-
 
     plt.show()
 
@@ -45,8 +46,45 @@ def bar_chart(event_time):
     ax.grid(axis='y', color='white')
     plt.show()
 
-def area_chart(event_time):
-    ...
+def area_chart(data, event_time):
+    spends = {}
+    users = {}
+
+    data['date'] = [date.date() for date in event_time]
+    for _, row in data.iterrows():
+        time_key = row['date']
+        user_id = row['user_id']
+        
+        if time_key not in spends:
+            spends[time_key] = row['price']
+            users[time_key] = {user_id}
+        else:
+            spends[time_key] += row['price']
+            users[time_key].add(user_id)
+
+    average_spent_by_customers = [spends[time_key] / len(users[time_key]) for time_key in spends.keys()]
+
+
+    x = list(spends.keys())
+    y = list(average_spent_by_customers)
+    
+    _, ax = plt.subplots()
+    
+    ax.set_xlim([x[0], x[-1]])
+    ax.xaxis.set_major_locator(mdates.MonthLocator())
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
+    
+    ax.set_ylim(0, max(y) + 1)
+    
+    ax.yaxis.set_major_locator(ticker.MultipleLocator(5))
+    ax.set_ylabel('Average spend/customers in ₳')
+    
+    ax.set_facecolor('lightgray')
+    plt.fill_between(x, y, zorder=3)
+    ax.grid(color='white')
+    plt.show()
+
+
 
 
 def main():
@@ -55,22 +93,21 @@ def main():
                                       user='hasabir', password='mysecretpassword')
         cursor = connection.cursor()
         with open("chart.sql", 'r') as file:
-            function_queries = file.read()
-        cursor.execute(function_queries)
-        connection.commit()
+            query = file.read()
+        cursor.execute(query)
+        data = cursor.fetchall()
         
         
-        # set the x axis
-        cursor.execute("SELECT * FROM get_event_time()")
-        event_time = cursor.fetchall()
-        connection.commit()
-        event_time = np.array([(number[0]) for number in event_time])
-
+        data = pd.DataFrame(data, columns=['event_time', 'user_id', 'price'])
+        event_time = [pd.Timestamp(date).to_pydatetime() for date in data['event_time'].values]
         line_chart(event_time)
+        
 
 
         bar_chart(event_time)
-        area_chart(event_time)
+        
+        
+        area_chart(data, event_time)
 
     except psycopg2.Error as e:
         print(f"An error occurred: {e}")
@@ -86,32 +123,6 @@ def main():
         
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-        # cursor.execute("SELECT * FROM get_price()")
-        # prices = cursor.fetchall()
-        # connection.commit()
-        # # print(prices[0][0])
-        # prices = np.array([(number[0]) for number in prices])
-
-
-
-
-
-
-
-
-
-
-
 
 
 
